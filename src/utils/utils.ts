@@ -1,6 +1,6 @@
 // меняет элементы массива местами
 export const swap = (
-  arr: number[],
+  arr: any,
   firstIndex: number,
   secondIndex: number,
 ): void => {
@@ -8,3 +8,7 @@ export const swap = (
   arr[firstIndex] = arr[secondIndex];
   arr[secondIndex] = temp;
 };
+
+export async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

@@ -9,7 +9,7 @@ export enum Direction {
   Descending = "descending",
 }
 
-export type TLetter = {
+export type TDataElement = {
   char: string,
   state: ElementStates
 }

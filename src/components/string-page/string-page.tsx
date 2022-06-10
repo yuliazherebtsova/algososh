@@ -4,22 +4,22 @@ import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { DELAY_IN_MS } from 'constants/delays';
 import React, { FC, useState } from 'react';
-import { ElementStates, TLetter } from 'types/types';
+import { ElementStates, TDataElement } from 'types/types';
 import { sleep, swap } from 'utils/utils';
-import styles from './string.module.css';
+import styles from './string-page.module.css';
 
 export const StringComponent: FC = () => {
   const [inputString, setInputString] = useState('');
-  const [inputLetters, setInputLetters] = useState<TLetter[]>([]);
+  const [inputLetters, setInputLetters] = useState<TDataElement[]>([]);
   const [inProgress, setInProgress] = useState(false);
 
-  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setInputString(e.currentTarget.value);
+  const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
+    setInputString(evt.currentTarget.value);
   };
 
   const reverseString = async () => {
     setInProgress(true);
-    const letters: TLetter[] = [];
+    const letters: TDataElement[] = [];
     inputString.split('').forEach((el) => {
       letters.push({ char: el, state: ElementStates.Default });
     });
@@ -49,7 +49,7 @@ export const StringComponent: FC = () => {
     setInProgress(false);
   };
 
-  const handleReverseButtonClick = (evt: React.SyntheticEvent) => {
+  const handleSubmitButtonClick = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     reverseString();
   };
@@ -58,7 +58,7 @@ export const StringComponent: FC = () => {
     <SolutionLayout title='Строка'>
       <form
         className={styles.formContainer}
-        onSubmit={handleReverseButtonClick}
+        onSubmit={handleSubmitButtonClick}
       >
         <Input isLimitText={true} maxLength={11} onChange={handleInputChange} />
         <Button

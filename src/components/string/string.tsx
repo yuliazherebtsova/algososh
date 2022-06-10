@@ -16,7 +16,6 @@ export const StringComponent: FC = () => {
   };
 
   const reverseString = () => {
-    //valueSetter('');
     setInProgress(true);
     const letters: TLetter[] = [];
     inputString.split('').forEach((el) => {

@@ -18,20 +18,19 @@ export const FibonacciPage: React.FC = () => {
     setInputNumber(input);
   };
 
-  const generateFibonacci = () => {
+  const generateFibonacci = async () => {
     setInProgress(true);
     const fibonacciNumbers = inputNumber
       ? [...iterativeFib(inputNumber)]
       : [];
     const numbersToRender: TDataElement[] = [];
-    console.log(fibonacciNumbers);
-    fibonacciNumbers.forEach(async (el) => {
+    await sleep(SHORT_DELAY_IN_MS);
+    fibonacciNumbers.forEach((el) => {
       numbersToRender.push({
         char: el.toString(),
         state: ElementStates.Default,
       });
       setGeneratedNumbers([...numbersToRender]);
-      await sleep(SHORT_DELAY_IN_MS);
     });
     setInProgress(false);
   };

@@ -15,9 +15,9 @@ import styles from './sorting-page.module.css';
 
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<TDataElement[]>();
-  const [sortDirection, setSortDirection] = useState(null);
+  const [sortDirection, setSortDirection] = useState<Direction | null>(null);
   const [inProgress, setInProgress] = useState(false);
-  const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm>();
+  const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm | null>(null);
 
   useEffect(() => {
     setSortAlgorithm(SortAlgorithm.selectsort);

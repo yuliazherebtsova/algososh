@@ -20,18 +20,17 @@ export const FibonacciPage: React.FC = () => {
 
   const generateFibonacci = async () => {
     setInProgress(true);
-    const fibonacciNumbers = inputNumber
-      ? [...iterativeFib(inputNumber)]
-      : [];
+    const fibonacciNumbers = inputNumber ? [...iterativeFib(inputNumber)] : [];
     const numbersToRender: TDataElement[] = [];
     await sleep(SHORT_DELAY_IN_MS);
-    fibonacciNumbers.forEach((element) => {
+    for (let i = 0; i < fibonacciNumbers.length; i++) {
       numbersToRender.push({
-        value: element.toString(),
+        value: fibonacciNumbers[i].toString(),
         state: ElementStates.Default,
       });
       setGeneratedNumbers([...numbersToRender]);
-    });
+      await sleep(SHORT_DELAY_IN_MS);
+    }
     setInProgress(false);
   };
 
@@ -75,7 +74,7 @@ export const FibonacciPage: React.FC = () => {
             state={number.state}
             letter={number.value.toString()}
             key={index}
-            index={index+10}
+            index={index + 10}
           />
         ))}
       </ul>

@@ -20,8 +20,8 @@ export const StringComponent: FC = () => {
   const reverseString = async () => {
     setInProgress(true);
     const letters: TDataElement[] = [];
-    inputString.split('').forEach((el) => {
-      letters.push({ char: el, state: ElementStates.Default });
+    inputString.split('').forEach((element) => {
+      letters.push({ value: element, state: ElementStates.Default });
     });
     setInputLetters([...letters]);
     await sleep(DELAY_IN_MS);
@@ -56,10 +56,7 @@ export const StringComponent: FC = () => {
 
   return (
     <SolutionLayout title='Строка'>
-      <form
-        className={styles.formContainer}
-        onSubmit={handleSubmitButtonClick}
-      >
+      <form className={styles.formContainer} onSubmit={handleSubmitButtonClick}>
         <Input isLimitText={true} maxLength={11} onChange={handleInputChange} />
         <Button
           text='Развернуть'
@@ -70,7 +67,11 @@ export const StringComponent: FC = () => {
       </form>
       <ul className={styles.lettersList}>
         {inputLetters.map((letter, index) => (
-          <Circle state={letter.state} letter={letter.char} key={index} />
+          <Circle
+            state={letter.state}
+            letter={letter.value.toString()}
+            key={index}
+          />
         ))}
       </ul>
     </SolutionLayout>

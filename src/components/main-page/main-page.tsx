@@ -54,7 +54,7 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
       <p
         className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
-        © Сделано в Практикуме.
+        © Yulia Zherebtsova. Сделано в Практикуме.
       </p>
     </main>
   );

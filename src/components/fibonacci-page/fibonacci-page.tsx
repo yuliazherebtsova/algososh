@@ -25,9 +25,9 @@ export const FibonacciPage: React.FC = () => {
       : [];
     const numbersToRender: TDataElement[] = [];
     await sleep(SHORT_DELAY_IN_MS);
-    fibonacciNumbers.forEach((el) => {
+    fibonacciNumbers.forEach((element) => {
       numbersToRender.push({
-        char: el.toString(),
+        value: element.toString(),
         state: ElementStates.Default,
       });
       setGeneratedNumbers([...numbersToRender]);
@@ -63,7 +63,7 @@ export const FibonacciPage: React.FC = () => {
         {generatedNumbers.slice(0, 10).map((number, index) => (
           <Circle
             state={number.state}
-            letter={number.char}
+            letter={number.value.toString()}
             key={index}
             index={index}
           />
@@ -73,7 +73,7 @@ export const FibonacciPage: React.FC = () => {
         {generatedNumbers.slice(10, 20).map((number, index) => (
           <Circle
             state={number.state}
-            letter={number.char}
+            letter={number.value.toString()}
             key={index}
             index={index+10}
           />

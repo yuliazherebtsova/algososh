@@ -9,7 +9,12 @@ export enum Direction {
   Descending = "descending",
 }
 
+export enum SortAlgorithm {
+  bubble = 'пузырек',
+  selectsort = 'выбор',
+}
+
 export type TDataElement = {
-  char: string,
+  value: string | number,
   state: ElementStates
 }

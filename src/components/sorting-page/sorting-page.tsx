@@ -20,7 +20,7 @@ export const SortingPage: React.FC = () => {
   const [sortAlgorigthm, setSortAlgorithm] = React.useState<SortAlgorithm>();
 
   useEffect(() => {
-    setSortAlgorithm(SortAlgorithm.bubble);
+    setSortAlgorithm(SortAlgorithm.selectsort);
     getRandomArray();
   }, []);
 

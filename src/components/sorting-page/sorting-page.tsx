@@ -14,10 +14,10 @@ import { getRandomInt, sleep, swap } from 'utils/utils';
 import styles from './sorting-page.module.css';
 
 export const SortingPage: React.FC = () => {
-  const [arrayToSort, setArrayToSort] = React.useState<TDataElement[]>();
-  const [sortDirection, setSortDirection] = React.useState<Direction>();
+  const [arrayToSort, setArrayToSort] = useState<TDataElement[]>();
+  const [sortDirection, setSortDirection] = useState(null);
   const [inProgress, setInProgress] = useState(false);
-  const [sortAlgorigthm, setSortAlgorithm] = React.useState<SortAlgorithm>();
+  const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm>();
 
   useEffect(() => {
     setSortAlgorithm(SortAlgorithm.selectsort);

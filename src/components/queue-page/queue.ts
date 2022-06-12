@@ -17,23 +17,27 @@ export class Queue<T> implements IQueue<T> {
     this.container = Array(size);
   }
 
-  get tail() {
-    if (this.isEmpty()) {
-      throw new Error('No elements in the queue');
-    } else {
-      return this.container[this._tail];
-    }
-  }
-
-  get head() {
-    if (this.isEmpty()) {
-      throw new Error('No elements in the queue');
-    } else {
-      return this.container[this._head];
-    }
-  }
-
   isEmpty = () => this.length === 0;
+
+  getTailElement() {
+    if (!this.isEmpty()) {
+      return {
+        index: this._tail - 1,
+        value: this.container[this._tail - 1],
+      };
+    }
+    return null;
+  }
+
+  getHeadElement() {
+    if (!this.isEmpty()) {
+      return {
+        index: this._head,
+        value: this.container[this._head],
+      };
+    }
+    return null;
+  }
 
   getSize = () => this.length;
 
@@ -41,7 +45,7 @@ export class Queue<T> implements IQueue<T> {
 
   enqueue = (item: T) => {
     if (this.length >= this.size) {
-      throw new Error('Maximum length exceeded');
+      throw new Error('enqueue: Maximum length exceeded');
     }
     this.container[this._tail % this.size] = item;
     this._tail++;
@@ -50,7 +54,7 @@ export class Queue<T> implements IQueue<T> {
 
   dequeue = () => {
     if (this.isEmpty()) {
-      throw new Error('No elements in the queue');
+      throw new Error('dequeue: No elements in the queue');
     }
     this.container[this._head] = null;
     this._head++;
@@ -58,16 +62,15 @@ export class Queue<T> implements IQueue<T> {
   };
 
   peek = (): T | null => {
-    if (!this.isEmpty()) {
-      return this.container[this._head];
+    if (this.isEmpty()) {
+      throw new Error('peek: No elements in the queue');
     }
-    return null;
+    return this.container[this._head];
   };
 
   clear = () => {
     this._head = 0;
     this._tail = 0;
     this.length = 0;
-    this.container = [];
   };
 }

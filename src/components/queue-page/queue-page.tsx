@@ -3,18 +3,17 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { SHORT_DELAY_IN_MS } from 'constants/delays';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
 import { sleep } from 'utils/utils';
 import { Queue } from './queue';
 import styles from './queue-page.module.css';
 
-const queueSize = 7;
-const queue = new Queue<TDataElement>(queueSize);
-
 export const QueuePage: React.FC = () => {
+  const maxQueueSize = 7;
+  const queue = useMemo(() => new Queue<TDataElement>(maxQueueSize), []);
   const [inputValue, setInputValue] = useState('');
-  const initialQueueElements = Array.from({ length: queueSize }, () => ({
+  const initialQueueElements = Array.from({ length: maxQueueSize }, () => ({
     value: '',
     state: ElementStates.Default,
   }));
@@ -27,28 +26,73 @@ export const QueuePage: React.FC = () => {
   };
 
   const handleAddClick = async () => {
-    console.log(queue)
     setInProgress(true);
     await sleep(SHORT_DELAY_IN_MS);
-    queue.enqueue({
-      value: inputValue,
-      state: ElementStates.Changing,
-    });
-    setQueueElements([...queue.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
-    const lastElement = queue.peek();
-    if (!queue.isEmpty() && lastElement) {
-      console.log(lastElement)
-      lastElement.state = ElementStates.Default;
+    let tail = queue.getTailElement();
+    if (tail?.value) {
+      tail.value.isTail = false;
+    }
+    if (queue.isEmpty()) {
+      queue.enqueue({
+        value: inputValue,
+        state: ElementStates.Changing,
+        isHead: true,
+        isTail: true,
+      });
+    } else {
+      queue.enqueue({
+        value: inputValue,
+        state: ElementStates.Changing,
+        isHead: false,
+        isTail: true,
+      });
     }
     setQueueElements([...queue.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);
+    tail = queue.getTailElement();
+    if (tail?.value) {
+      tail.value.state = ElementStates.Default;
+    }
+    setQueueElements([...queue.getElements()]);
     setInProgress(false);
   };
 
-  const handleDeleteClick = async () => {};
+  const handleDeleteClick = async () => {
+    setInProgress(true);
+    await sleep(SHORT_DELAY_IN_MS);
+    let head = queue.getHeadElement();
+    let tail = queue.getTailElement();
+    if (!queue.isEmpty() && head?.value) {
+      head.value.state = ElementStates.Changing;
+      setQueueElements([...queue.getElements()]);
+      await sleep(SHORT_DELAY_IN_MS);
+      head.value.isHead = false;
+      queue.dequeue();
+    }
+    if (head?.index === tail?.index) {
+      queue.clear();
+    }
+    head = queue.getHeadElement();
+    if (!queue.isEmpty() && head?.value) {
+      head.value.isHead = true;
+      setQueueElements([...queue.getElements()]);
+    }
+    setQueueElements([...queue.getElements()]);
+    await sleep(SHORT_DELAY_IN_MS);
+    if (head?.value) {
+      head.value.state = ElementStates.Default;
+    }
+    setQueueElements([...queue.getElements()]);
+    setInProgress(false);
+  };
 
-  const handleClearClick = async () => {};
+  const handleClearClick = async () => {
+    setInProgress(true);
+    await sleep(SHORT_DELAY_IN_MS);
+    queue.clear();
+    setQueueElements([...initialQueueElements]);
+    setInProgress(false);
+  };
 
   return (
     <SolutionLayout title='Очередь'>
@@ -61,19 +105,21 @@ export const QueuePage: React.FC = () => {
         />
         <Button
           disabled={
-            inProgress || inputValue.length === 0 || queueElements.length > 9
+            inProgress ||
+            inputValue.length === 0 ||
+            queueElements.length > maxQueueSize
           }
           text='Добавить'
           onClick={handleAddClick}
         />
         <Button
-          disabled={inProgress || queueElements.length === 0}
+          disabled={inProgress || queue.isEmpty()}
           text='Удалить'
           extraClass={'mr-40'}
           onClick={handleDeleteClick}
         />
         <Button
-          disabled={inProgress || queueElements.length === 0}
+          disabled={inProgress || queue.isEmpty()}
           text='Очистить'
           onClick={handleClearClick}
         />

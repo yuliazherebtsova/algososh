@@ -11,7 +11,9 @@ import styles from './stack-page.module.css';
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
-  const [stackElements, setStackElements] = useState<TDataElement[]>([]);
+  const [stackElements, setStackElements] = useState<(TDataElement | null)[]>(
+    [],
+  );
   const [inProgress, setInProgress] = useState(false);
 
   const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
@@ -21,8 +23,9 @@ export const StackPage: React.FC = () => {
   const handleAddClick = async () => {
     setInProgress(true);
     await sleep(SHORT_DELAY_IN_MS);
-    if (!stack.isEmpty()) {
-      stack.peek().isHead = false;
+    let lastElement = stack.peek();
+    if (!stack.isEmpty() && lastElement) {
+      lastElement.isHead = false;
     }
     stack.push({
       value: inputValue,
@@ -31,7 +34,10 @@ export const StackPage: React.FC = () => {
     });
     setStackElements([...stack.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);
-    stack.peek().state = ElementStates.Default;
+    lastElement = stack.peek();
+    if (!stack.isEmpty() && lastElement) {
+      lastElement.state = ElementStates.Default;
+    }
     setStackElements([...stack.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);
     setInProgress(false);
@@ -40,14 +46,18 @@ export const StackPage: React.FC = () => {
   const handleDeleteClick = async () => {
     setInProgress(true);
     await sleep(SHORT_DELAY_IN_MS);
-    stack.peek().state = ElementStates.Changing;
+    let lastElement = stack.peek();
+    if (!stack.isEmpty() && lastElement) {
+      lastElement.state = ElementStates.Changing;
+    }
     setStackElements([...stack.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);
     stack.pop();
     setStackElements([...stack.getElements()]);
-    if (!stack.isEmpty()) {
-      stack.peek().state = ElementStates.Default;
-      stack.peek().isHead = true;
+    lastElement = stack.peek();
+    if (!stack.isEmpty() && lastElement) {
+      lastElement.state = ElementStates.Default;
+      lastElement.isHead = true;
     }
     setStackElements([...stack.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);

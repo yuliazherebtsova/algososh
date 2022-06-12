@@ -8,7 +8,7 @@ interface IStack<T> {
 }
 
 export class Stack<T> implements IStack<T> {
-  private container: T[] = [];
+  private container: (T | null)[] = [];
 
   getSize = () => this.container.length;
 

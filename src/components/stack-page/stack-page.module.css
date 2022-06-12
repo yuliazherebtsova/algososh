@@ -1,0 +1,15 @@
+.pageContainer {
+  margin: 0 auto;
+  max-width: 870px;
+  display: flex;
+  gap: 12px;
+}
+
+.stackContainer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  list-style-type: none;
+  margin-top: 52px;
+  padding: 0;
+}

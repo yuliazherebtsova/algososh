@@ -146,7 +146,7 @@ export const SortingPage: React.FC = () => {
 
   return (
     <SolutionLayout title='Сортировка массива'>
-      <div className={styles.formContainer}>
+      <div className={styles.pageContainer}>
         <div className={styles.radioButtonsContainer}>
           <RadioInput
             name='radio'

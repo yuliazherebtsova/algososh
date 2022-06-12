@@ -1,12 +1,12 @@
 export enum ElementStates {
-  Default = "default",
-  Changing = "changing",
-  Modified = "modified",
+  Default = 'default',
+  Changing = 'changing',
+  Modified = 'modified',
 }
 
 export enum Direction {
-  Ascending = "ascending",
-  Descending = "descending",
+  Ascending = 'ascending',
+  Descending = 'descending',
 }
 
 export enum SortAlgorithm {
@@ -15,6 +15,7 @@ export enum SortAlgorithm {
 }
 
 export type TDataElement = {
-  value: string | number,
-  state: ElementStates
-}
+  value: string | number;
+  state: ElementStates;
+  isHead?: boolean;
+};

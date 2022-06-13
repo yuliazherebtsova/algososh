@@ -21,8 +21,8 @@
   justify-content: start;
 }
 
-.buttonsContainer > button {
-  width: 210px;
+.largeButton {
+  min-width: 210px;
 }
 
 .barsContainer {

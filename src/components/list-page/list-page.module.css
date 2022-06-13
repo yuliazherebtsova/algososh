@@ -1,0 +1,32 @@
+.pageContainer {
+  margin: 0 auto;
+  max-width: 1240px;
+}
+
+.controlsContainer {
+  padding-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.smallButton {
+  min-width: 175px;
+}
+
+.largeButton {
+  min-width: 364px;
+}
+
+.input {
+  max-width: 200px;
+}
+
+.listContainer {
+  margin-top: 120px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  list-style-type: none;
+}

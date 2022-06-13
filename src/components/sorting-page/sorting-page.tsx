@@ -17,7 +17,9 @@ export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<TDataElement[]>();
   const [sortDirection, setSortDirection] = useState<Direction | null>(null);
   const [inProgress, setInProgress] = useState(false);
-  const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm | null>(null);
+  const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm | null>(
+    null,
+  );
 
   useEffect(() => {
     setSortAlgorithm(SortAlgorithm.selectsort);
@@ -167,7 +169,7 @@ export const SortingPage: React.FC = () => {
           <Button
             text='По возрастанию'
             sorting={Direction.Ascending}
-            extraClass='mr-12'
+            extraClass={`mr-12 ${styles.largeButton}`}
             disabled={inProgress}
             isLoader={inProgress && sortDirection === Direction.Ascending}
             onClick={onAscendingClick}
@@ -175,7 +177,7 @@ export const SortingPage: React.FC = () => {
           <Button
             text='По убыванию'
             sorting={Direction.Descending}
-            extraClass='mr-40'
+            extraClass={`mr-40 ${styles.largeButton}`}
             disabled={inProgress}
             isLoader={inProgress && sortDirection === Direction.Descending}
             onClick={onDescendingClick}

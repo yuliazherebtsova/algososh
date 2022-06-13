@@ -34,12 +34,13 @@ export const ListPage: FC = () => {
         isTail: false,
         isLinked: true,
       });
+      list.append(element);
     });
     initialList[0].isHead = true;
     initialList[initialList.length - 1].isTail = true;
     initialList[initialList.length - 1].isLinked = false;
     setListElements(initialList);
-  }, [initialList, initialListElements]);
+  }, [initialList, initialListElements, list]);
 
   const handleInputValueChange = (evt: React.FormEvent<HTMLInputElement>) => {
     setInputValue(evt.currentTarget.value);
@@ -71,7 +72,6 @@ export const ListPage: FC = () => {
     });
     setListElements([...listElements]);
     listElements[0].state = ElementStates.Default;
-
     await sleep(SHORT_DELAY_IN_MS);
     setListElements([...listElements]);
     setInProgress(false);
@@ -82,6 +82,27 @@ export const ListPage: FC = () => {
     setInProgress(true);
     setIsAddingTail(true);
     await sleep(SHORT_DELAY_IN_MS);
+    let tailIndex = list.getSize() - 1;
+    listElements[tailIndex].isTail = false;
+    listElements[tailIndex].positionToChange = true;
+    listElements[tailIndex].valueToChange = inputValue;
+    setListElements([...listElements]);
+    await sleep(SHORT_DELAY_IN_MS);
+    listElements[tailIndex].positionToChange = false;
+    listElements[tailIndex].isLinked = true;
+    list.append(inputValue);
+    tailIndex = list.getSize() - 1;
+    const tail = list.getNodeByIndex(tailIndex);
+    listElements.push({
+      value: tail ? tail : '',
+      state: ElementStates.Modified,
+      isTail: true,
+      isLinked: false,
+    });
+    setListElements([...listElements]);
+    listElements[tailIndex].state = ElementStates.Default;
+    await sleep(SHORT_DELAY_IN_MS);
+    setListElements([...listElements]);
     setInProgress(false);
     setIsAddingTail(false);
   };
@@ -159,7 +180,7 @@ export const ListPage: FC = () => {
       <ul className={styles.listContainer}>
         {listElements.map((element, index) => (
           <div className={styles.node} key={index}>
-            {(isAddingHead || isAddingAtIndex) && element.positionToChange && (
+            {(isAddingHead || isAddingTail || isAddingAtIndex) && element.positionToChange && (
               <Circle
                 state={ElementStates.Changing}
                 letter={element.valueToChange?.toString()}

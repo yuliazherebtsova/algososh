@@ -16,7 +16,7 @@ interface ILinkedList<T> {
   print: () => void;
 }
 
-class LinkedList<T> implements ILinkedList<T> {
+export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
   private size: number;
 

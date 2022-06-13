@@ -14,8 +14,8 @@ export const FibonacciPage: React.FC = () => {
   const [inProgress, setInProgress] = useState(false);
 
   const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
-    const input = parseInt(evt.currentTarget.value);
-    setInputNumber(input);
+    const inputNumber = parseInt(evt.currentTarget.value);
+    setInputNumber(inputNumber);
   };
 
   const generateFibonacci = async () => {

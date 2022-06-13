@@ -11,11 +11,11 @@
 }
 
 .smallButton {
-  min-width: 175px;
+  width: 180px;
 }
 
 .largeButton {
-  min-width: 364px;
+  width: 372px;
 }
 
 .input {
@@ -27,6 +27,20 @@
   padding: 0;
   display: flex;
   justify-content: center;
-  gap: 16px;
+  align-items: center;
   list-style-type: none;
+}
+
+.node {
+  padding: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addingNode {
+  position: absolute;
+  top: -64px;
+  left: 24px;
 }

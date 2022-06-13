@@ -19,4 +19,7 @@ export type TDataElement = {
   state: ElementStates;
   isHead?: boolean;
   isTail?: boolean;
+  isLinked?: boolean;
+  positionToChange?: boolean;
+  valueToChange?: string | number;
 };

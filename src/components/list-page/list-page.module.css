@@ -44,3 +44,9 @@
   top: -64px;
   left: 24px;
 }
+
+.deletingNode {
+  position: absolute;
+  top: 120px;
+  left: 24px;
+}

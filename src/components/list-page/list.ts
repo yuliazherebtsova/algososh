@@ -20,9 +20,10 @@ export class LinkedList<T> implements ILinkedList<T> {
   private head: Node<T> | null;
   private size: number;
 
-  constructor() {
+  constructor(initArray?: T[]) {
     this.head = null;
     this.size = 0;
+    initArray?.forEach((node) => this.append(node));
   }
 
   isEmpty = () => this.size === 0;

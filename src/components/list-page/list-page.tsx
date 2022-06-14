@@ -3,7 +3,7 @@ import { Circle } from 'components/ui/circle/circle';
 import { ArrowIcon } from 'components/ui/icons/arrow-icon';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from 'constants/delays';
+import { SHORT_DELAY_IN_MS } from 'constants/delays';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
 import { sleep } from 'utils/utils';
@@ -11,8 +11,11 @@ import { LinkedList } from './list';
 import styles from './list-page.module.css';
 
 export const ListPage: FC = () => {
-  const list = useMemo(() => new LinkedList<string | number>(), []);
   const initialListElements = useMemo(() => ['0', '34', '8', '1'], []);
+  const list = useMemo(
+    () => new LinkedList<string | number>(initialListElements),
+    [initialListElements],
+  );
   const initialList: TDataElement[] = useMemo(() => [], []);
   const [inputValue, setInputValue] = useState('');
   const [inputIndex, setInputIndex] = useState<number>(-1);
@@ -34,7 +37,6 @@ export const ListPage: FC = () => {
         isTail: false,
         isLinked: true,
       });
-      list.append(element);
     });
     initialList[0].isHead = true;
     initialList[initialList.length - 1].isTail = true;
@@ -161,7 +163,7 @@ export const ListPage: FC = () => {
   };
 
   const handleAddAtIndexClick = async () => {
-    list.print()
+    list.print();
     setInProgress(true);
     setIsAddingAtIndex(true);
     await sleep(SHORT_DELAY_IN_MS);
@@ -198,7 +200,7 @@ export const ListPage: FC = () => {
     setIsAddingAtIndex(false);
     setInputIndex(-1);
     setInputValue('');
-    list.print()
+    list.print();
   };
 
   const handleDeleteAtIndexClick = async () => {

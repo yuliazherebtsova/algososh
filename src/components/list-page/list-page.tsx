@@ -163,7 +163,6 @@ export const ListPage: FC = () => {
   };
 
   const handleAddAtIndexClick = async () => {
-    list.print();
     setInProgress(true);
     setIsAddingAtIndex(true);
     await sleep(SHORT_DELAY_IN_MS);
@@ -200,7 +199,6 @@ export const ListPage: FC = () => {
     setIsAddingAtIndex(false);
     setInputIndex(-1);
     setInputValue('');
-    list.print();
   };
 
   const handleDeleteAtIndexClick = async () => {

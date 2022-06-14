@@ -41,6 +41,7 @@ export const StackPage: React.FC = () => {
     setStackElements([...stack.getElements()]);
     await sleep(SHORT_DELAY_IN_MS);
     setInProgress(false);
+    setInputValue('');
   };
 
   const handleDeleteClick = async () => {

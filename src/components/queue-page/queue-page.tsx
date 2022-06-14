@@ -55,6 +55,7 @@ export const QueuePage: React.FC = () => {
     }
     setQueueElements([...queue.getElements()]);
     setInProgress(false);
+    setInputValue('');
   };
 
   const handleDeleteClick = async () => {
@@ -84,6 +85,7 @@ export const QueuePage: React.FC = () => {
     }
     setQueueElements([...queue.getElements()]);
     setInProgress(false);
+    setInputValue('');
   };
 
   const handleClearClick = async () => {
@@ -92,6 +94,7 @@ export const QueuePage: React.FC = () => {
     queue.clear();
     setQueueElements([...initialQueueElements]);
     setInProgress(false);
+    setInputValue('');
   };
 
   return (

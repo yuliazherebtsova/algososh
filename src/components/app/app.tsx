@@ -9,7 +9,7 @@ import { StackPage } from "../stack-page/stack-page";
 
 function App() {
   return (
-      <BrowserRouter>
+      <BrowserRouter basename="/algososh">
         <Switch>
           <Route path="/" exact>
             <MainPage />

@@ -19,7 +19,7 @@
 
 ## Ссылка на проект
 
-TODO
+https://yuliazherebtsova.github.io/algososh/
 
 ## Сборка проекта
 

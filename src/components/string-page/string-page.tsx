@@ -8,7 +8,7 @@ import { ElementStates, TDataElement } from 'types/types';
 import { swap, updateElementsWithInterval } from 'utils/utils';
 import styles from './string-page.module.css';
 
-export const StringComponent: FC = () => {
+export const StringPage: FC = () => {
   const [inputString, setInputString] = useState('');
   const [inputLetters, setInputLetters] = useState<(TDataElement | null)[]>([]);
   const [inProgress, setInProgress] = useState(false);
@@ -31,18 +31,11 @@ export const StringComponent: FC = () => {
     inputString.split('').forEach((element) => {
       letters.push({ value: element, state: ElementStates.Default });
     });
-    await updateElementsWithInterval(
-      setInputLetters,
-      letters,
-      DELAY_IN_MS,
-      isComponentMounted,
-    );
     let start = 0;
     let end = letters.length - 1;
     while (start <= end) {
       if (end === start) {
         letters[start].state = ElementStates.Modified;
-        setInputLetters([...letters]);
         setInProgress(false);
         break;
       } else {
@@ -57,7 +50,12 @@ export const StringComponent: FC = () => {
         swap(letters, start, end);
         letters[start].state = ElementStates.Modified;
         letters[end].state = ElementStates.Modified;
-        setInputLetters([...letters]);
+        await updateElementsWithInterval(
+          setInputLetters,
+          letters,
+          DELAY_IN_MS,
+          isComponentMounted,
+        );
         start++;
         end--;
       }

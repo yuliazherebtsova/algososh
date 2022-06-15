@@ -3,9 +3,9 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { SHORT_DELAY_IN_MS } from 'constants/delays';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
-import { sleep } from 'utils/utils';
+import { sleep, updateElementsWithInterval } from 'utils/utils';
 import { Queue } from './queue';
 import styles from './queue-page.module.css';
 
@@ -20,6 +20,14 @@ export const QueuePage: React.FC = () => {
   const [queueElements, setQueueElements] =
     useState<(TDataElement | null)[]>(initialQueueElements);
   const [inProgress, setInProgress] = useState(false);
+  const [isComponentMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
     setInputValue(evt.currentTarget.value);
@@ -27,7 +35,6 @@ export const QueuePage: React.FC = () => {
 
   const handleAddClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     let tail = queue.getTailElement();
     if (tail?.value) {
       tail.value.isTail = false;
@@ -47,26 +54,38 @@ export const QueuePage: React.FC = () => {
         isTail: true,
       });
     }
-    setQueueElements([...queue.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setQueueElements,
+      [...queue.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     tail = queue.getTailElement();
     if (tail?.value) {
       tail.value.state = ElementStates.Default;
     }
-    setQueueElements([...queue.getElements()]);
+    await updateElementsWithInterval(
+      setQueueElements,
+      [...queue.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     setInProgress(false);
     setInputValue('');
   };
 
   const handleDeleteClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     let head = queue.getHeadElement();
     let tail = queue.getTailElement();
     if (!queue.isEmpty() && head?.value) {
       head.value.state = ElementStates.Changing;
-      setQueueElements([...queue.getElements()]);
-      await sleep(SHORT_DELAY_IN_MS);
+      await updateElementsWithInterval(
+        setQueueElements,
+        [...queue.getElements()],
+        SHORT_DELAY_IN_MS,
+        isComponentMounted,
+      );
       head.value.isHead = false;
       queue.dequeue();
     }
@@ -78,8 +97,12 @@ export const QueuePage: React.FC = () => {
       head.value.isHead = true;
       setQueueElements([...queue.getElements()]);
     }
-    setQueueElements([...queue.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setQueueElements,
+      [...queue.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     if (head?.value) {
       head.value.state = ElementStates.Default;
     }
@@ -90,9 +113,13 @@ export const QueuePage: React.FC = () => {
 
   const handleClearClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     queue.clear();
-    setQueueElements([...initialQueueElements]);
+    await updateElementsWithInterval(
+      setQueueElements,
+      [...initialQueueElements],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     setInProgress(false);
     setInputValue('');
   };

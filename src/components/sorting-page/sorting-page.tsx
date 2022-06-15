@@ -10,140 +10,177 @@ import {
   SortAlgorithm,
   TDataElement,
 } from 'types/types';
-import { getRandomInt, sleep, swap } from 'utils/utils';
+import { getRandomInt, swap, updateElementsWithInterval } from 'utils/utils';
 import styles from './sorting-page.module.css';
 
 export const SortingPage: React.FC = () => {
-  const [arrayToSort, setArrayToSort] = useState<TDataElement[]>();
-  const [sortDirection, setSortDirection] = useState<Direction | null>(null);
+  const [arrayToSort, setArrayToSort] = useState<(TDataElement | null)[]>();
+  const [isAscending, setIsAscending] = useState(false);
   const [inProgress, setInProgress] = useState(false);
   const [sortAlgorigthm, setSortAlgorithm] = useState<SortAlgorithm | null>(
     null,
   );
+  const [isComponentMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     setSortAlgorithm(SortAlgorithm.selectsort);
     getRandomArray();
+    return () => {
+      setIsMounted(false);
+    };
   }, []);
 
   const getRandomArray = () => {
-    const arrLength = getRandomInt(3, 17);
+    const minLen = 3;
+    const maxLen = 17;
+    const minValue = 0;
+    const maxValue = 100;
+    const arrLength = getRandomInt(minLen, maxLen);
     const randomArray = Array.from({ length: arrLength }, () => ({
-      value: getRandomInt(0, 100),
+      value: getRandomInt(minValue, maxValue),
       state: ElementStates.Default,
     }));
     setArrayToSort([...randomArray]);
   };
 
-  const selectionSort = async () => {
+  const selectionSort = async (isAscending: boolean) => {
     let arr = arrayToSort ? [...arrayToSort] : [];
-    if (sortDirection === Direction.Ascending) {
+    if (isAscending) {
       // по возрастанию
       for (let i = 0; i < arr.length - 1; i++) {
         let indToSwap = i;
-        arr[i].state = ElementStates.Changing;
-        setArrayToSort([...arr]);
+        arr[i]!.state = ElementStates.Changing;
+        await updateElementsWithInterval(
+          setArrayToSort,
+          arr,
+          SHORT_DELAY_IN_MS,
+          isComponentMounted,
+        );
         for (let j = i + 1; j < arr.length; j++) {
-          arr[j].state = ElementStates.Changing;
+          arr[j]!.state = ElementStates.Changing;
           setArrayToSort([...arr]);
-          if (arr[j].value < arr[indToSwap].value) {
+          if (arr[j]!.value < arr[indToSwap]!.value) {
             indToSwap = j;
           }
-          await sleep(SHORT_DELAY_IN_MS);
-          arr[j].state = ElementStates.Default;
-          setArrayToSort([...arr]);
+          arr[j]!.state = ElementStates.Default;
+          await updateElementsWithInterval(
+            setArrayToSort,
+            arr,
+            SHORT_DELAY_IN_MS,
+            isComponentMounted,
+          );
         }
+        arr[i]!.state = ElementStates.Default;
         swap(arr, i, indToSwap);
-        arr[i].state = ElementStates.Modified;
+        arr[i]!.state = ElementStates.Modified;
         setArrayToSort([...arr]);
       }
-      arr[arr.length - 1].state = ElementStates.Modified;
+      arr[arr.length - 1]!.state = ElementStates.Modified;
       setArrayToSort([...arr]);
     } else {
       // по убыванию
       for (let i = 0; i < arr.length - 1; i++) {
         let indToSwap = i;
-        arr[i].state = ElementStates.Changing;
-        setArrayToSort([...arr]);
+        arr[i]!.state = ElementStates.Changing;
+        await updateElementsWithInterval(
+          setArrayToSort,
+          arr,
+          SHORT_DELAY_IN_MS,
+          isComponentMounted,
+        );
         for (let j = i + 1; j < arr.length; j++) {
-          arr[j].state = ElementStates.Changing;
+          arr[j]!.state = ElementStates.Changing;
           setArrayToSort([...arr]);
-          if (arr[j].value > arr[indToSwap].value) {
+          if (arr[j]!.value > arr[indToSwap]!.value) {
             indToSwap = j;
           }
-          await sleep(SHORT_DELAY_IN_MS);
-          arr[j].state = ElementStates.Default;
-          setArrayToSort([...arr]);
+          arr[j]!.state = ElementStates.Default;
+          await updateElementsWithInterval(
+            setArrayToSort,
+            arr,
+            SHORT_DELAY_IN_MS,
+            isComponentMounted,
+          );
         }
+        arr[i]!.state = ElementStates.Default;
         swap(arr, i, indToSwap);
-        arr[i].state = ElementStates.Modified;
+        arr[i]!.state = ElementStates.Modified;
         setArrayToSort([...arr]);
       }
-      arr[arr.length - 1].state = ElementStates.Modified;
+      arr[arr.length - 1]!.state = ElementStates.Modified;
       setArrayToSort([...arr]);
     }
   };
 
-  const bubbleSort = async () => {
+  const bubbleSort = async (isAscending: boolean) => {
     let arr = arrayToSort ? [...arrayToSort] : [];
-    if (sortDirection === Direction.Ascending) {
+    if (isAscending) {
       // по возрастанию
       for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr.length - i - 1; j++) {
-          arr[j].state = ElementStates.Changing;
-          arr[j + 1].state = ElementStates.Changing;
+          arr[j]!.state = ElementStates.Changing;
+          arr[j + 1]!.state = ElementStates.Changing;
           setArrayToSort([...arr]);
-          if (arr[j].value > arr[j + 1].value) {
+          if (arr[j]!.value > arr[j + 1]!.value) {
             swap(arr, j, j + 1);
           }
-          await sleep(SHORT_DELAY_IN_MS);
-          arr[j].state = ElementStates.Default;
-          arr[j + 1].state = ElementStates.Default;
-          setArrayToSort([...arr]);
+          await updateElementsWithInterval(
+            setArrayToSort,
+            arr,
+            SHORT_DELAY_IN_MS,
+            isComponentMounted,
+          );
+          arr[j]!.state = ElementStates.Default;
+          arr[j + 1]!.state = ElementStates.Default;
         }
-        arr[arr.length - i - 1].state = ElementStates.Modified;
+        arr[arr.length - i - 1]!.state = ElementStates.Modified;
         setArrayToSort([...arr]);
       }
     } else {
       // по убыванию
       for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr.length - i - 1; j++) {
-          arr[j].state = ElementStates.Changing;
-          arr[j + 1].state = ElementStates.Changing;
+          arr[j]!.state = ElementStates.Changing;
+          arr[j + 1]!.state = ElementStates.Changing;
           setArrayToSort([...arr]);
-          if (arr[j].value < arr[j + 1].value) {
+          if (arr[j]!.value < arr[j + 1]!.value) {
             swap(arr, j, j + 1);
           }
-          await sleep(SHORT_DELAY_IN_MS);
-          arr[j].state = ElementStates.Default;
-          arr[j + 1].state = ElementStates.Default;
-          setArrayToSort([...arr]);
+          await updateElementsWithInterval(
+            setArrayToSort,
+            arr,
+            SHORT_DELAY_IN_MS,
+            isComponentMounted,
+          );
+          arr[j]!.state = ElementStates.Default;
+          arr[j + 1]!.state = ElementStates.Default;
         }
-        arr[arr.length - i - 1].state = ElementStates.Modified;
+        arr[arr.length - i - 1]!.state = ElementStates.Modified;
         setArrayToSort([...arr]);
       }
     }
   };
 
-  const sortArray = async () => {
+  const sortArray = async (isAscending: boolean) => {
     setInProgress(true);
     if (sortAlgorigthm === SortAlgorithm.selectsort) {
-      await selectionSort();
+      await selectionSort(isAscending);
     }
     if (sortAlgorigthm === SortAlgorithm.bubble) {
-      await bubbleSort();
+      await bubbleSort(isAscending);
     }
     setInProgress(false);
   };
 
-  const onAscendingClick = () => {
-    setSortDirection(Direction.Ascending);
-    sortArray();
-  };
-
-  const onDescendingClick = () => {
-    setSortDirection(Direction.Descending);
-    sortArray();
+  const onSortClick = async (direction: Direction) => {
+    setInProgress(true);
+    setIsAscending(direction === Direction.Ascending);
+    setIsAscending((state) => {
+      sortArray(state);
+      return state;
+    });
+    setInProgress(false);
   };
 
   return (
@@ -171,16 +208,16 @@ export const SortingPage: React.FC = () => {
             sorting={Direction.Ascending}
             extraClass={`mr-12 ${styles.largeButton}`}
             disabled={inProgress}
-            isLoader={inProgress && sortDirection === Direction.Ascending}
-            onClick={onAscendingClick}
+            isLoader={inProgress && isAscending}
+            onClick={() => onSortClick(Direction.Ascending)}
           />
           <Button
             text='По убыванию'
             sorting={Direction.Descending}
             extraClass={`mr-40 ${styles.largeButton}`}
             disabled={inProgress}
-            isLoader={inProgress && sortDirection === Direction.Descending}
-            onClick={onDescendingClick}
+            isLoader={inProgress && !isAscending}
+            onClick={() => onSortClick(Direction.Descending)}
           />
           <Button
             disabled={inProgress}
@@ -192,8 +229,8 @@ export const SortingPage: React.FC = () => {
       <div className={styles.barsContainer}>
         {arrayToSort?.map((element, index) => (
           <Column
-            index={parseInt(element.value.toString())}
-            state={element.state}
+            index={parseInt(element!.value.toString())}
+            state={element?.state}
             key={index}
           />
         ))}

@@ -3,9 +3,9 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { SHORT_DELAY_IN_MS } from 'constants/delays';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
-import { sleep } from 'utils/utils';
+import { updateElementsWithInterval } from 'utils/utils';
 import { stack } from './stack';
 import styles from './stack-page.module.css';
 
@@ -15,6 +15,14 @@ export const StackPage: React.FC = () => {
     [],
   );
   const [inProgress, setInProgress] = useState(false);
+  const [isComponentMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
     setInputValue(evt.currentTarget.value);
@@ -22,7 +30,6 @@ export const StackPage: React.FC = () => {
 
   const handleAddClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     let lastElement = stack.peek();
     if (!stack.isEmpty() && lastElement) {
       lastElement.isHead = false;
@@ -32,44 +39,62 @@ export const StackPage: React.FC = () => {
       state: ElementStates.Changing,
       isHead: true,
     });
-    setStackElements([...stack.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setStackElements,
+      [...stack.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     lastElement = stack.peek();
     if (!stack.isEmpty() && lastElement) {
       lastElement.state = ElementStates.Default;
     }
-    setStackElements([...stack.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setStackElements,
+      [...stack.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     setInProgress(false);
     setInputValue('');
   };
 
   const handleDeleteClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     let lastElement = stack.peek();
     if (!stack.isEmpty() && lastElement) {
       lastElement.state = ElementStates.Changing;
     }
-    setStackElements([...stack.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setStackElements,
+      [...stack.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     stack.pop();
-    setStackElements([...stack.getElements()]);
     lastElement = stack.peek();
     if (!stack.isEmpty() && lastElement) {
       lastElement.state = ElementStates.Default;
       lastElement.isHead = true;
     }
-    setStackElements([...stack.getElements()]);
-    await sleep(SHORT_DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setStackElements,
+      [...stack.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     setInProgress(false);
   };
 
   const handleClearClick = async () => {
     setInProgress(true);
-    await sleep(SHORT_DELAY_IN_MS);
     stack.clear();
-    setStackElements([...stack.getElements()]);
+    await updateElementsWithInterval(
+      setStackElements,
+      [...stack.getElements()],
+      SHORT_DELAY_IN_MS,
+      isComponentMounted,
+    );
     setInProgress(false);
   };
 

@@ -3,15 +3,23 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { DELAY_IN_MS } from 'constants/delays';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
-import { sleep, swap } from 'utils/utils';
+import { swap, updateElementsWithInterval } from 'utils/utils';
 import styles from './string-page.module.css';
 
 export const StringComponent: FC = () => {
   const [inputString, setInputString] = useState('');
-  const [inputLetters, setInputLetters] = useState<TDataElement[]>([]);
+  const [inputLetters, setInputLetters] = useState<(TDataElement | null)[]>([]);
   const [inProgress, setInProgress] = useState(false);
+  const [isComponentMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const handleInputChange = (evt: React.FormEvent<HTMLInputElement>) => {
     setInputString(evt.currentTarget.value);
@@ -23,8 +31,12 @@ export const StringComponent: FC = () => {
     inputString.split('').forEach((element) => {
       letters.push({ value: element, state: ElementStates.Default });
     });
-    setInputLetters([...letters]);
-    await sleep(DELAY_IN_MS);
+    await updateElementsWithInterval(
+      setInputLetters,
+      letters,
+      DELAY_IN_MS,
+      isComponentMounted,
+    );
     let start = 0;
     let end = letters.length - 1;
     while (start <= end) {
@@ -36,8 +48,12 @@ export const StringComponent: FC = () => {
       } else {
         letters[start].state = ElementStates.Changing;
         letters[end].state = ElementStates.Changing;
-        setInputLetters([...letters]);
-        await sleep(DELAY_IN_MS);
+        await updateElementsWithInterval(
+          setInputLetters,
+          letters,
+          DELAY_IN_MS,
+          isComponentMounted,
+        );
         swap(letters, start, end);
         letters[start].state = ElementStates.Modified;
         letters[end].state = ElementStates.Modified;
@@ -68,8 +84,8 @@ export const StringComponent: FC = () => {
       <ul className={styles.lettersList}>
         {inputLetters.map((letter, index) => (
           <Circle
-            state={letter.state}
-            letter={letter.value.toString()}
+            state={letter?.state}
+            letter={letter?.value.toString()}
             key={index}
           />
         ))}

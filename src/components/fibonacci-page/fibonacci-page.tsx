@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './fibonacci-page.module.css';
-import { iterativeFib, updateElementsWithInterval } from 'utils/utils';
+import { updateElementsWithInterval } from 'utils/utils';
 import { Button } from 'components/ui/button/button';
 import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { SHORT_DELAY_IN_MS } from 'constants/delays';
 import { ElementStates, TDataElement } from 'types/types';
+import { iterativeFib } from './utils';
 
 export const FibonacciPage: React.FC = () => {
   const [inputNumber, setInputNumber] = useState<number>(-1);

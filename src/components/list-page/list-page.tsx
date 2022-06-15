@@ -6,7 +6,7 @@ import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { SHORT_DELAY_IN_MS } from 'constants/delays';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
-import { sleep, updateElementsWithInterval } from 'utils/utils';
+import { updateElementsWithInterval } from 'utils/utils';
 import { LinkedList } from './list';
 import styles from './list-page.module.css';
 

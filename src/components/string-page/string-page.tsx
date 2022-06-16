@@ -3,10 +3,9 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { DELAY_IN_MS } from 'constants/delays';
-import { setPriority } from 'os';
 import React, { FC, useEffect, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
-import { swap, updateElementsWithInterval } from 'utils/utils';
+import { updateElementsWithInterval } from 'utils/utils';
 import styles from './string-page.module.css';
 import { getReversingStringSteps } from './utils';
 
@@ -61,6 +60,7 @@ export const StringPage: FC = () => {
         currentStep++;
       }
     }
+    setInputString('');
     setInProgress(false);
   };
 
@@ -72,7 +72,12 @@ export const StringPage: FC = () => {
   return (
     <SolutionLayout title='Строка'>
       <form className={styles.formContainer} onSubmit={handleSubmitButtonClick}>
-        <Input isLimitText={true} maxLength={11} onChange={handleInputChange} />
+        <Input
+          value={inputString}
+          isLimitText={true}
+          maxLength={11}
+          onChange={handleInputChange}
+        />
         <Button
           text='Развернуть'
           type='submit'

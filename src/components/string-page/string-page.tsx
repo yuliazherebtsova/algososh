@@ -3,14 +3,16 @@ import { Circle } from 'components/ui/circle/circle';
 import { Input } from 'components/ui/input/input';
 import { SolutionLayout } from 'components/ui/solution-layout/solution-layout';
 import { DELAY_IN_MS } from 'constants/delays';
+import { setPriority } from 'os';
 import React, { FC, useEffect, useState } from 'react';
 import { ElementStates, TDataElement } from 'types/types';
 import { swap, updateElementsWithInterval } from 'utils/utils';
 import styles from './string-page.module.css';
+import { getReversingStringSteps } from './utils';
 
 export const StringPage: FC = () => {
   const [inputString, setInputString] = useState('');
-  const [inputLetters, setInputLetters] = useState<(TDataElement | null)[]>([]);
+  const [letters, setLetters] = useState<(TDataElement | null)[]>([]);
   const [inProgress, setInProgress] = useState(false);
   const [isComponentMounted, setIsMounted] = useState(false);
 
@@ -27,37 +29,36 @@ export const StringPage: FC = () => {
 
   const reverseString = async () => {
     setInProgress(true);
-    const letters: TDataElement[] = [];
+    const inputLetters: TDataElement[] = [];
     inputString.split('').forEach((element) => {
-      letters.push({ value: element, state: ElementStates.Default });
+      inputLetters.push({ value: element, state: ElementStates.Default });
     });
-    let start = 0;
-    let end = letters.length - 1;
-    while (start <= end) {
-      if (end === start) {
-        letters[start].state = ElementStates.Modified;
-        setInProgress(false);
-        break;
-      } else {
-        letters[start].state = ElementStates.Changing;
-        letters[end].state = ElementStates.Changing;
+    const steps = getReversingStringSteps(inputString);
+    let currentStep = 0;
+    while (currentStep < steps.length) {
+      if (steps) {
         await updateElementsWithInterval(
-          setInputLetters,
-          letters,
+          setLetters,
+          [...inputLetters],
           DELAY_IN_MS,
           isComponentMounted,
         );
-        swap(letters, start, end);
-        letters[start].state = ElementStates.Modified;
-        letters[end].state = ElementStates.Modified;
+        let leftIndex = currentStep;
+        let rightIndex = inputLetters.length - currentStep - 1;
+        inputLetters[currentStep].state = ElementStates.Changing;
+        inputLetters[inputLetters.length - currentStep - 1].state =
+          ElementStates.Changing;
         await updateElementsWithInterval(
-          setInputLetters,
-          letters,
+          setLetters,
+          [...inputLetters],
           DELAY_IN_MS,
           isComponentMounted,
         );
-        start++;
-        end--;
+        inputLetters[leftIndex].state = ElementStates.Modified;
+        inputLetters[rightIndex].state = ElementStates.Modified;
+        inputLetters[leftIndex].value = steps[currentStep][leftIndex];
+        inputLetters[rightIndex].value = steps[currentStep][rightIndex];
+        currentStep++;
       }
     }
     setInProgress(false);
@@ -80,7 +81,7 @@ export const StringPage: FC = () => {
         />
       </form>
       <ul className={styles.lettersList}>
-        {inputLetters.map((letter, index) => (
+        {letters.map((letter, index) => (
           <Circle
             state={letter?.state}
             letter={letter?.value.toString()}

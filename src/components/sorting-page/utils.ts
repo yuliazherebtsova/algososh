@@ -2,10 +2,10 @@ import { ElementStates, TDataElement } from 'types/types';
 import { swap } from 'utils/utils';
 
 export const getSelectionSortSteps = (
-  tmp: (TDataElement | null)[],
+  arrToSort: (TDataElement | null)[],
   isAscending: boolean,
 ) => {
-  const arr = tmp ? [...tmp] : [];
+  const arr = arrToSort ? [...arrToSort] : [];
   const steps: (TDataElement | null)[][] = [];
   if (isAscending) {
     // по возрастанию
@@ -86,10 +86,10 @@ export const getSelectionSortSteps = (
 };
 
 export const getBubbleSortSteps = (
-  tmp: (TDataElement | null)[],
+  arrToSort: (TDataElement | null)[],
   isAscending: boolean,
 ) => {
-  const arr = tmp ? [...tmp] : [];
+  const arr = arrToSort ? [...arrToSort] : [];
   const steps: (TDataElement | null)[][] = [];
   if (isAscending) {
     // по возрастанию

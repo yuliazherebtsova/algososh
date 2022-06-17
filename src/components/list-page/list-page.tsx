@@ -249,7 +249,7 @@ export const ListPage: FC = () => {
       listElements[i]!.isTail = false;
       setListElements([...listElements]);
       if (i === inputIndex) {
-        const tmp = listElements[i]!.value;
+        const value = listElements[i]!.value;
         listElements[i]!.value = '';
         await updateElementsWithInterval(
           setListElements,
@@ -257,7 +257,7 @@ export const ListPage: FC = () => {
           SHORT_DELAY_IN_MS,
           isComponentMounted,
         );
-        listElements[i]!.valueToChange = tmp;
+        listElements[i]!.valueToChange = value;
       }
       await updateElementsWithInterval(
         setListElements,

@@ -45,8 +45,7 @@ export const StringPage: FC = () => {
         let leftIndex = currentStep;
         let rightIndex = inputLetters.length - currentStep - 1;
         inputLetters[leftIndex].state = ElementStates.Changing;
-        inputLetters[rightIndex].state =
-          ElementStates.Changing;
+        inputLetters[rightIndex].state = ElementStates.Changing;
         await updateElementsWithInterval(
           setLetters,
           [...inputLetters],

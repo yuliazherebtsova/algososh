@@ -12,7 +12,7 @@ import {
 } from 'types/types';
 import { getRandomInt, updateElementsWithInterval } from 'utils/utils';
 import styles from './sorting-page.module.css';
-import { getSelectionSortSteps } from './utils';
+import { getBubbleSortSteps, getSelectionSortSteps } from './utils';
 
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<(TDataElement | null)[]>([]);
@@ -65,52 +65,22 @@ export const SortingPage: React.FC = () => {
   };
 
   const bubbleSort = async (isAscending: boolean) => {
-    // let arr = arrayToSort ? [...arrayToSort] : [];
-    // if (isAscending) {
-    //   // по возрастанию
-    //   for (let i = 0; i < arr.length; i++) {
-    //     for (let j = 0; j < arr.length - i - 1; j++) {
-    //       arr[j]!.state = ElementStates.Changing;
-    //       arr[j + 1]!.state = ElementStates.Changing;
-    //       setArrayToSort([...arr]);
-    //       if (arr[j]!.value > arr[j + 1]!.value) {
-    //         swap(arr, j, j + 1);
-    //       }
-    //       await updateElementsWithInterval(
-    //         setArrayToSort,
-    //         arr,
-    //         SHORT_DELAY_IN_MS,
-    //         isComponentMounted,
-    //       );
-    //       arr[j]!.state = ElementStates.Default;
-    //       arr[j + 1]!.state = ElementStates.Default;
-    //     }
-    //     arr[arr.length - i - 1]!.state = ElementStates.Modified;
-    //     setArrayToSort([...arr]);
-    //   }
-    // } else {
-    //   // по убыванию
-    //   for (let i = 0; i < arr.length; i++) {
-    //     for (let j = 0; j < arr.length - i - 1; j++) {
-    //       arr[j]!.state = ElementStates.Changing;
-    //       arr[j + 1]!.state = ElementStates.Changing;
-    //       setArrayToSort([...arr]);
-    //       if (arr[j]!.value < arr[j + 1]!.value) {
-    //         swap(arr, j, j + 1);
-    //       }
-    //       await updateElementsWithInterval(
-    //         setArrayToSort,
-    //         arr,
-    //         SHORT_DELAY_IN_MS,
-    //         isComponentMounted,
-    //       );
-    //       arr[j]!.state = ElementStates.Default;
-    //       arr[j + 1]!.state = ElementStates.Default;
-    //     }
-    //     arr[arr.length - i - 1]!.state = ElementStates.Modified;
-    //     setArrayToSort([...arr]);
-    //   }
-    // }
+    const steps = getBubbleSortSteps(
+      arrayToSort ? [...arrayToSort] : [],
+      isAscending,
+    );
+    let currentStep = 0;
+    while (currentStep < steps.length) {
+      if (steps) {
+        await updateElementsWithInterval(
+          setArrayToSort,
+          [...steps[currentStep]],
+          SHORT_DELAY_IN_MS,
+          isComponentMounted,
+        );
+        currentStep++;
+      }
+    }
   };
 
   const sortArray = async (isAscending: boolean) => {

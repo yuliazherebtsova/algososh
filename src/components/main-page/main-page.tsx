@@ -22,7 +22,7 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
         </p>
       </div>
       <div className={styles.cards_box}>
-        <Link className={styles.link} to="/recursion">
+        <Link className={styles.link} to="/string">
           <div className={`${styles.card} ${styles.string}`} />
         </Link>
         <Link className={styles.link} to="/fibonacci">
@@ -54,7 +54,7 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
       <p
         className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
-        © Сделано в Практикуме.
+        © Yulia Zherebtsova. Сделано в Практикуме.
       </p>
     </main>
   );

@@ -1,0 +1,52 @@
+.pageContainer {
+  margin: 0 auto;
+  max-width: 1240px;
+}
+
+.controlsContainer {
+  padding-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.smallButton {
+  width: 180px;
+}
+
+.largeButton {
+  width: 372px;
+}
+
+.input {
+  max-width: 200px;
+}
+
+.listContainer {
+  margin-top: 120px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+}
+
+.node {
+  padding: 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addingNode {
+  position: absolute;
+  top: -64px;
+  left: 24px;
+}
+
+.deletingNode {
+  position: absolute;
+  top: 120px;
+  left: 24px;
+}

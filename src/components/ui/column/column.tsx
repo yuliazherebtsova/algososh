@@ -1,6 +1,6 @@
 import React from "react";
+import { ElementStates } from 'types/types';
 import styles from "./column.module.css";
-import { ElementStates } from "../../../types/element-states";
 
 interface ColumnProps {
   index: number;

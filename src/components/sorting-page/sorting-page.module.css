@@ -1,0 +1,39 @@
+.pageContainer {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 1024px;
+  padding-bottom: 48px;
+}
+
+.radioButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.buttonsContainer {
+  width: 100%;
+  max-width: 730px;
+  display: flex;
+  justify-content: start;
+}
+
+.largeButton {
+  min-width: 210px;
+}
+
+.barsContainer {
+  margin: 0 auto;
+  padding: 0;
+  width: 940px;
+  height: 330px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  column-gap: 16px;
+  row-gap: 48px;
+  list-style-type: none;
+}
